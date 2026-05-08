@@ -41,9 +41,9 @@ print(player.y)
 # Prints 0.1
 
 print(enemy.x)
-# Prints 0.1
+# Prints 1.1
 print(enemy.y)
-# Prints 0.1
+# Prints 1.1
 ```
 
 # A Bit More Sophistication

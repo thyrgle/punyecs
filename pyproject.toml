@@ -1,7 +1,7 @@
 [project]
 name = "punyecs"
 version = "0.1.0"
-description = "Add your description here"
+description = "A simple attribute-based approach to ECS."
 readme = "README.md"
 authors = [
     { email = "csumnicht@berkeley.edu" }

@@ -17,3 +17,6 @@ build-backend = "uv_build"
 dev = [
     "pytest>=9.0.3",
 ]
+docs = [
+    "sphinx>=9.0.4",
+]

@@ -18,7 +18,11 @@ class World:
 
     def entity_satisfies_query(self, entity, query) -> bool:
         """Check if an entity should (or should not) be added to a particular
-        group by analyzing the query structure."""
+        group by analyzing the query structure.
+
+        :param entity: The entity to query.
+        :param query: The query to check if the entity can belong to it.
+        """
         for e in query.exclude_obj:
             if entity == e:
                 return False
@@ -31,20 +35,30 @@ class World:
         return True
 
     def push_group(self, query: Query):
-        """Add the group and return that group."""
+        """Add the group and return that group.
+
+        :param query: The query to associate with the group.
+        """
         new_group = (query, [], [])
         self.groups.append(new_group)
         return new_group
 
     def add(self, entity: Any):
         """Add an entity to the world. Under the hood, determines what groups
-        the entity should belong to."""
+        the entity should belong to.
+
+        :param entity: The entity to add to the world.
+        """
         for query, group, funcs in self.groups:
             if self.entity_satisfies_query(entity, query):
                 group.append(entity)
 
     def update(self, dt: float):
-        """Update the world (and all the corresponding groups/entities)."""
+        """Update the world (and all the corresponding groups/entities).
+
+        :param dt: The amount of time that elapsed. (Common for videogame 
+           applications)
+        """
         for _, group, funcs in self.groups:
             for func in funcs:
                 for entity in group:

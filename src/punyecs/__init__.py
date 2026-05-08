@@ -51,9 +51,10 @@ class World:
                     func(entity, dt)
 
 
-def requirements(world, require: list[str],
-                 exclude: list[str]=None, exclude_obj: list[Any]=None,
-                 *args, **kwargs):
+def requirements(world: World, 
+                 require: set[str],
+                 exclude: set[str] | None=None, 
+                 exclude_obj: set[Any] | None=None):
     """Use as a decorator, runs the decorated function on each entity that
     has the required components and none of the excluded components (or
     excluded objects).
@@ -62,20 +63,18 @@ def requirements(world, require: list[str],
     :param exclude: Entity must *not* have the following attributes.
     :param exclude_obj: Exculde individual objects from being ran.
     """
+    exclude = exclude or set()
+    exclude_obj = exclude_obj or set()
     def req_dec(func):
-        nonlocal exclude
-        nonlocal exclude_obj
-        exclude = exclude or []
-        exclude_obj = exclude_obj or []
         query = Query(require, exclude, exclude_obj)
         group = world.push_group(query)
-        group[2].append(func)
-        def inner(func):
-            return func()
+        def inner(e, dt):
+            return func(e, dt)
+        group[2].append(inner)
         return inner
     return req_dec
 
-def query(world: World, query: Query, *args, **kwarg):
+def query(world: World, query: Query):
     """Use as a decorator, runs the decorated function on each entity that
     satisfy the query object (similar to ``requirements`` but takes in a 
     Query object directly. ``requirements`` builds a query object.
@@ -88,6 +87,5 @@ def query(world: World, query: Query, *args, **kwarg):
         def inner(e, dt):
             return func(e, dt)
         group[2].append(inner)
-        print(world.groups)
         return inner
     return query_dec

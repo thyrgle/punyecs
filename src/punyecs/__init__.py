@@ -8,7 +8,7 @@ class Query:
     (or disallowed) in a group."""
     and_attr: set[str] = field(default_factory=set)
     exclude_attr: set[str] = field(default_factory=set)
-    exclude_obj: set[Any] = field(default_factory=set)
+    exclude_obj: list[Any] = field(default_factory=set)
 
 
 @dataclass
@@ -54,7 +54,7 @@ class World:
 def requirements(world: World, 
                  require: set[str],
                  exclude: set[str] | None=None, 
-                 exclude_obj: set[Any] | None=None):
+                 exclude_obj: list[Any] | None=None):
     """Use as a decorator, runs the decorated function on each entity that
     has the required components and none of the excluded components (or
     excluded objects).
@@ -63,8 +63,8 @@ def requirements(world: World,
     :param exclude: Entity must *not* have the following attributes.
     :param exclude_obj: Exculde individual objects from being ran.
     """
-    exclude = exclude or set()
-    exclude_obj = exclude_obj or set()
+    exclude = exclude or []
+    exclude_obj = exclude_obj or []
     def req_dec(func):
         query = Query(require, exclude, exclude_obj)
         group = world.push_group(query)

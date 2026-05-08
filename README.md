@@ -57,7 +57,7 @@ def f(e, dt):
     e.y += 0.1
 ```
 
-Then after every `world.update(1)`, the `player` object *will still remain at* `x=0`, `y=0`.
+Then after every `world.update(1)`, the `player` object *will still remain at* `x=0.0`, `y=0.0`.
 
 # Even More
 

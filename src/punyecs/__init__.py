@@ -49,8 +49,8 @@ class World:
                     func(entity, dt)
 
 
-def query(world, require: list[str],
-          exclude: list[str]=None, exclude_obj: list[Any]=None):
+def requirements(world, require: list[str],
+                 exclude: list[str]=None, exclude_obj: list[Any]=None):
     """Use as a decorator, runs the decorated function on each entity that
     has the required components and none of the excluded components (or
     excluded objects).
@@ -62,6 +62,20 @@ def query(world, require: list[str],
     exclude = exclude or []
     exclude_obj = exclude_obj or []
     query = Query(require, exclude, exclude_obj)
+    group = world.add_group(query)
+    def inner(func):
+        group[2].append(func)
+        return func()
+    return inner
+
+def query(world, query: Query):
+    """Use as a decorator, runs the decorated function on each entity that
+    satisfy the query object (similar to ``requirements`` but takes in a 
+    Query object directly. ``requirements`` builds a query object.
+
+    :param world: World to query over.
+    :param query: Query to execute against.
+    """
     group = world.add_group(query)
     def inner(func):
         group[2].append(func)

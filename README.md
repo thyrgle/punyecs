@@ -45,3 +45,20 @@ print(enemy.x)
 print(enemy.y)
 # Prints 0.1
 ```
+
+# A Bit More Sophistication
+
+We may also do exclusions for fine grain control. Returning to the example above, we may want various enemies to move like above but instead want to allow controller input for the `player` object. We can avoid influencing the `player` object by putting it in the excluded objects list. the function `f` becomes:
+
+```py
+@requirements(w, {"x", "y"}, exclude_obj={player})
+def f(e, dt):
+    e.x += 0.1
+    e.y += 0.1
+```
+
+Then after every `world.update(1)`, the `player` object *will still remain at* `x=0`, `y=0`.
+
+# Even More
+
+(TODO).

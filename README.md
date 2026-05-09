@@ -61,4 +61,65 @@ Then after every `world.update(1)`, the `player` object *will still remain at* `
 
 # Even More Sophistication!
 
-(TODO)
+It might be inconvenient to exclude *individual* objects if a large number of objects need to be excluded. One way around this is to specify which attributes an object should *not* have.
+
+So for instance, we may have many different kinds of creatures. Most need can follow the usual movement update function, but some creatures have a `wiggle` attribute. `wiggle` could be a Boolean, or even something more sophisticated like a function that describes how the creature wiggles.
+
+To illustrate this consider:
+
+```py
+from dataclasses import dataclass
+from punyecs import World, requirements
+
+w = World()
+
+@dataclass
+class Player:
+    x: float
+    y: float
+
+@dataclass
+class WalkingEnemy:
+    x: float
+    y: float
+
+@dataclass
+class Wiggler:
+    x: float
+    y: float
+    wiggle: lambda x: x + 2
+
+@requirements(w, {"x", "y"}, exclude: {"wiggle"})
+def move(e, dt):
+    e.x += 0.1
+    e.y += 0.1
+
+@requirements(w, {"wiggle", "x", "y"})
+def wiggle(e, dt):
+    e.x = wiggle(e.x)
+    e.y = wiggle(e.y)
+
+
+player = Player(0.0, 0.0)
+enemy = Enemy(1.0, 1.0)
+wiggler = Wiggle(3.0, 3.0)
+w.add(player)
+w.add(enemy)
+w.add(wiggler)
+
+w.update(1)
+print(player.x)
+# Prints 0.1
+print(player.y)
+# Prints 0.1
+
+print(enemy.x)
+# Prints 1.1
+print(enemy.y)
+# Prints 1.1
+
+print(wiggler.x)
+# Prints 5.0
+print(wiggler.y)
+# Prints 5.0
+```

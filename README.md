@@ -89,7 +89,7 @@ class Wiggler:
     y: float
     wiggle: lambda x: x + 2
 
-@requirements(w, {"x", "y"}, exclude: {"wiggle"})
+@requirements(w, {"x", "y"}, exclude={"wiggle"})
 def move(e, dt):
     e.x += 0.1
     e.y += 0.1
